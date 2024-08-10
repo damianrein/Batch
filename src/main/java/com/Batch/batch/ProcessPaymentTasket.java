@@ -1,5 +1,6 @@
 package com.Batch.batch;
 
+import org.jboss.logging.Logger;
 import org.springframework.batch.core.StepContribution;
 import org.springframework.batch.core.scope.context.ChunkContext;
 import org.springframework.batch.core.step.tasklet.Tasklet;
@@ -10,6 +11,7 @@ import com.Batch.repositories.ITransferPaymentRepository;
 
 public class ProcessPaymentTasket implements Tasklet {
 
+	Logger log = Logger.getLogger(ProcessPaymentTasket.class);
     @Autowired
     private ITransferPaymentRepository transferPaymentRepository;
 
@@ -21,7 +23,7 @@ public class ProcessPaymentTasket implements Tasklet {
                 .getJobParameters()
                 .getString("transactionId");
 
-
+        log.info("------> Se procesa el pago de la transaccion {" + transactionId + "} exitosamente.");
         transferPaymentRepository.updateTransferState(true, transactionId);
 
         return RepeatStatus.FINISHED;
